@@ -10,7 +10,7 @@ jobs:
         
       - name: Dependances
         run: |
-          docker run --rm -v "$PWD":/project  aquasec/trivy:latest fs --file-patterns "pip:requirements.txt" --severity HIGH,CRITICAL --exit-code 1 /project
+          docker run --rm -v "$PWD":/project aquasec/trivy:0.57.0 fs --scanners vuln --severity HIGH,CRITICAL --exit-code 1 /project/requirements.txt
           
   Dockerfile:
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
         
       - name: Test Dockerfile
         run: |
-          docker run --rm -v "$PWD":/project  aquasec/trivy:latest config --severity HIGH,CRITICAL --exit-code 1 /project/Dockerfile
+          docker run --rm -v "$PWD":/project aquasec/trivy:0.57.0 config --severity HIGH,CRITICAL --exit-code 1 /project
           
   Deploy:
     runs-on: ubuntu-latest
