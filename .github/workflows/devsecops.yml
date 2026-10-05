@@ -1,17 +1,24 @@
 name: Automatisation des tests DevSecOps
 on: push
+
 jobs:
   Dependances:
     runs-on: ubuntu-latest
     steps:
+      - name: Récupérer le code source
+        uses: action/checkout@v4
+        
       - name: Dependances
         run: |
-          docker run --rm -v "$PWD":/project  aquasec/trivy:latest fs --severity HIGH,CRITICAL --exit-code 1 /project/requirements.txt
+          docker run --rm -v "$PWD":/project  aquasec/trivy:latest fs --file-patterns "pip:requirements.txt" --severity HIGH,CRITICAL --exit-code 1 /project
           
   Dockerfile:
     runs-on: ubuntu-latest
     needs: Dependances
     steps:
+      - name: Récupérer le code source
+        uses: action/checkout@v4
+        
       - name: Test Dockerfile
         run: |
           docker run --rm -v "$PWD":/project  aquasec/trivy:latest config --severity HIGH,CRITICAL --exit-code 1 /project/Dockerfile
